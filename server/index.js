@@ -6,12 +6,13 @@ const cors = require("cors");
 const helmet = require("helmet");
 const passport = require("passport");
 const googlePassportSetUp = require("./Auth/Passport");
-const authRouter = require("./routes/auth");
-const authRoutes = require("./routes/auth");
+const router = require("./routes/auth"); // arpit
+const authRoutes = require("./routes/auth"); // rohit
 const messageRoutes = require("./routes/messages");
+const authRouter = require("./routes/auth.routes"); // abhinav
 const socket = require("socket.io");
-const server = express();
 
+const server = express();
 server.use(express.urlencoded({ extended: true }));
 server.use(
   cookiesSession({
@@ -31,13 +32,12 @@ server.use(
 );
 server.use(helmet());
 server.use(express.json());
-
 server.get("/", (req, res) => {
   res.send(`API Server started on localhost:${PORT}`);
 });
-
-server.use("/auth", authRouter);
+server.use("/auth", router);
 server.use("/api/auth", authRoutes);
+server.use("/auth/user", authRouter);
 server.use("/api/messages", messageRoutes);
 
 const PORT = process.env.PORT || 8080;
