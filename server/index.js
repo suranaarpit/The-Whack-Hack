@@ -7,8 +7,8 @@ const helmet = require("helmet");
 const passport = require("passport");
 const googlePassportSetUp = require("./Auth/Passport");
 const authRouter = require("./routes/auth");
-const authRoutes = require("./routes/auth");
-const messageRoutes = require("./routes/messages");
+// const authRoutes = require("./routes/auth");
+// const messageRoutes = require("./routes/messages");
 const socket = require("socket.io");
 const server = express();
 
@@ -37,8 +37,8 @@ server.get("/", (req, res) => {
 });
 
 server.use("/auth", authRouter);
-server.use("/api/auth", authRoutes);
-server.use("/api/messages", messageRoutes);
+// server.use("/api/auth", authRoutes);
+// server.use("/api/messages", messageRoutes);
 
 const PORT = process.env.PORT || 8080;
 
