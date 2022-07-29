@@ -29,7 +29,7 @@ function App() {
   };
 
   const onCreateUser = () => {
-    console.log(username);
+    // console.log(username);
     socket.emit("new_user", username);
     const a = parseInt(Math.floor(Math.random() * 8) + 1) + ".png";
     setAvatar(a);
@@ -89,12 +89,12 @@ function App() {
 
   useEffect(() => {
     socket.on("all_users", (users) => {
-      console.log({ users });
+      // console.log({ users });
       setUsers(users);
     });
 
     socket.on("new_message", (data) => {
-      console.log(data);
+      // console.log(data);
 
       setGroupMessage((prevGroupMessage) => {
         const messages = { ...prevGroupMessage };
@@ -141,7 +141,7 @@ function App() {
     }
   }, [groupMessage]);
 
-  console.log(groupMessage);
+  // console.log(groupMessage);
 
   return (
     <div className="App">
