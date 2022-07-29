@@ -5,15 +5,6 @@
   var canvas = document.getElementsByClassName("whiteboard")[0];
   var colors = document.getElementsByClassName("color");
   var context = canvas.getContext("2d");
-  var clear = document.getElementById("clear");
-
-  clear.addEventListener("clear", function () {
-    clearWhiteboard();
-  });
-
-  const clearWhiteboard = () => {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-  };
 
   var current = {
     color: "black",
