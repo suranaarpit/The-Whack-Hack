@@ -1,14 +1,11 @@
 import "./App.css";
 import { io } from "socket.io-client";
 import logo from "./assets/logo.png";
-// import sendIcon from "./assets/send.png";
-// import attachment from "./assets/paper-clip.png";
-// import userPic from "./users/1.png";
 import { useEffect, useRef, useState } from "react";
 import CreateUser from "./components/CreateUser";
 import OnlineUsers from "./components/OnlineUsers";
 import MessagesControl from "./components/MessagesControl";
-const socket = io(`http://localhost:8080`);
+const socket = io(`https://masaihackathonchatapi.herokuapp.com/`);
 function App() {
   const [step, setStep] = useState(0);
   const [username, setUsername] = useState("");
