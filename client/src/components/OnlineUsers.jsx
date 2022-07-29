@@ -20,7 +20,11 @@ const OnlineUsers = (props) => {
               {user !== username ? (
                 <li key={user} onClick={() => onUserSelect(user)}>
                   <span style={{ textTransform: "capitalize" }}>{user}</span>
-                  <span className="new-message-count">5</span>
+                  {checkUnseenMessages(user) !== 0 ? (
+                    <span className="new-message-count">
+                      {checkUnseenMessages(user)}
+                    </span>
+                  ) : null}
                 </li>
               ) : null}
             </>
