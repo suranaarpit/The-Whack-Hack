@@ -1,74 +1,46 @@
-const express = require("express");
-require("dotenv").config({ path: "./.env" });
-const connection = require("./Database/db");
-const cookiesSession = require("cookie-session");
+const app = require("express")();
 const cors = require("cors");
-const helmet = require("helmet");
-const passport = require("passport");
-const googlePassportSetUp = require("./Auth/Passport");
-const router = require("./routes/auth"); // arpit
-const authRoutes = require("./routes/auth"); // rohit
-const messageRoutes = require("./routes/messages");
-const authRouter = require("./routes/auth.routes"); // abhinav
-const socket = require("socket.io");
-
-const server = express();
-server.use(express.urlencoded({ extended: true }));
-server.use(
-  cookiesSession({
-    name: "session",
-    keys: ["Arpit"],
-    maxAge: 24 * 60 * 60 * 100,
-  })
-);
-server.use(passport.initialize());
-server.use(passport.session());
-server.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: "GET, POST, PUT, DELETE",
-    credentials: true,
-  })
-);
-server.use(helmet());
-server.use(express.json());
-server.get("/", (req, res) => {
-  res.send(`API Server started on localhost:${PORT}`);
-});
-server.use("/auth", router);
-server.use("/api/auth", authRoutes);
-server.use("/auth/user", authRouter);
-server.use("/api/messages", messageRoutes);
-
-server.use("/auth", authRouter);
-// server.use("/api/auth", authRoutes);
-// server.use("/api/messages", messageRoutes);
-
-const PORT = process.env.PORT || 8080;
-
-const NEW_SERVER = server.listen(PORT, async () => {
-  await connection;
-  console.log("Connected to Database");
-  console.log(`🌎 started on http://localhost:${PORT}/`);
-});
-const io = socket(NEW_SERVER, {
+const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer, {
   cors: {
     origin: "http://localhost:3000",
-    credentials: true,
   },
 });
+const PORT = process.env.PORT || 8080;
 
-global.onlineUsers = new Map();
+const users = {};
+
 io.on("connection", (socket) => {
-  global.chatSocket = socket;
-  socket.on("add-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
+  console.log(`Someone Connected and Socket ID is ${socket.id}`);
+
+  socket.on("disconnect", () => {
+    console.log(`${socket.id} is Disconnected`);
+
+    for(let user in users){
+      if(users[user] === socket.id){
+        delete users[user]
+      }
+    }
+
+    // we can tell every other users someone is disconnected
+    io.emit("all_users", users)
   });
 
-  socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
-    }
+  socket.on("new_user", (username) => {
+    console.log(`${username} is connected on Server`);
+    users[username] = socket.id
+
+    // we can tell every other users someone is connetced
+    io.emit("all_users", users)
   });
+
+  socket.on("send_message", (data)=>{
+      console.log(data);
+
+      const socketID = users[data.receiver]
+      io.to(socketID).emit("new_message", data)
+  })
+});
+httpServer.listen(PORT, () => {
+  console.log(`🌎 Started on http://localhost:${PORT}`);
 });
