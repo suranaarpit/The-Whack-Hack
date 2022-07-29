@@ -18,7 +18,7 @@ const OnlineUsers = (props) => {
           Object.keys(users).map((user, index) => (
             <>
               {user !== username ? (
-                <li key={user} onClick={() => onUserSelect("Arpit")}>
+                <li key={user} onClick={() => onUserSelect(user)}>
                   <span style={{ textTransform: "capitalize" }}>{user}</span>
                   <span className="new-message-count">5</span>
                 </li>

@@ -12,22 +12,38 @@ const socket = io(`http://localhost:8080`);
 function App() {
   const [step, setStep] = useState(0);
   const [username, setUsername] = useState("");
+  const [receiver, setReceiver] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [media, setMedia] = useState(null);
   const [users, setUsers] = useState({});
   const [message, setMessage] = useState("");
+  const [groupMessage, setGroupMessage] = useState({})
 
   const onCreateUser = () => {
     console.log(username);
     socket.emit("new_user", username);
-
+    const a = Math.floor(Math.random() * 8) + ".png";
+    setAvatar(a);
     setStep((prevStep) => prevStep + 1);
   };
 
-  const onUserSelect = (key) => {
+  const onUserSelect = (username) => {
+    setReceiver(username);
     setStep((prevStep) => prevStep + 1);
   };
 
   const sendMessage = (e) => {
     e.preventDefault();
+    const data = {
+      sender: username,
+      receiver,
+      message,
+      media,
+      avatar,
+    };
+    socket.emit("send_message", data);
+    
+    console.log({ message });
   };
 
   useEffect(() => {
@@ -35,6 +51,10 @@ function App() {
       console.log({ users });
       setUsers(users);
     });
+
+    socket.on("new_message", (data)=>{
+      console.log(data);
+    })
   }, []);
 
   return (
