@@ -110,7 +110,7 @@ const MessagesControl = (props) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
-                  console.log(reader.result);
+                  // console.log(reader.result);
                   setMedia({
                     image: true,
                     content: reader.result,
