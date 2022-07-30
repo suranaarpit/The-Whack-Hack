@@ -37,14 +37,13 @@ const MessagesControl = (props) => {
         <div
           style={{
             margin: "0 5px",
-            cursor: "pointer",
             fontSize: "14px",
           }}
         >
           <a
             href="https://chat-app-whiteboard.herokuapp.com/"
             target={"_blank"}
-            style={{ color: "white", textDecoration: "none" }}
+            style={{ color: "white", textDecoration: "none", cursor: "pointer" }}
           >
             Whiteboard
           </a>
