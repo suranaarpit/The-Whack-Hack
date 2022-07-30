@@ -44,8 +44,9 @@ const MessagesControl = (props) => {
           <a
             href="https://chat-app-whiteboard.herokuapp.com/"
             target={"_blank"}
+            style={{ color: "white", textDecoration: "none" }}
           >
-            Connect on Whiteboard
+            Whiteboard
           </a>
         </div>
         <div>
